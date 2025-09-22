@@ -110,13 +110,13 @@ class Nasa_Products_Tabs_WGSC extends Nasa_Elementor_Widget {
             ),
             
             'tab_active_image' => array(
-                'type' => 'image_upload',
+                'type' => 'attach_image',
                 'std' => '',
                 'label' => __('Active Tab Image', 'nasa-core')
             ),
             
             'tab_inactive_image' => array(
-                'type' => 'image_upload',
+                'type' => 'attach_image',
                 'std' => '',
                 'label' => __('Inactive Tab Image', 'nasa-core')
             ),
@@ -572,46 +572,10 @@ class Nasa_Products_Tabs_WGSC extends Nasa_Elementor_Widget {
 
                     <?php
                     break;
-                
-                /**
-                 * Image upload field
-                 */
-                case 'image_upload':
-                    $image_url = '';
-                    if ($value) {
-                        $image = wp_get_attachment_image_src($value, 'thumbnail');
-                        $image_url = $image ? $image[0] : '';
-                    }
-                    ?>
-                    <div class="nasa-image-upload-wrap">
-                        <label for="<?php echo esc_attr($data_id); ?>">
-                            <?php echo wp_kses_post($setting['label']); ?>
-                        </label>
-                        
-                        <div class="nasa-image-preview">
-                            <?php if ($image_url): ?>
-                                <img src="<?php echo esc_url($image_url); ?>" style="max-width: 100px; height: auto;" />
-                            <?php endif; ?>
-                        </div>
-                        
-                        <input type="hidden" class="nasa-image-id" id="<?php echo esc_attr($data_id); ?>" name="<?php echo esc_attr($data_name); ?>" value="<?php echo esc_attr($value); ?>" />
-                        
-                        <button type="button" class="button nasa-upload-image-btn" data-target="<?php echo esc_attr($data_id); ?>">
-                            <?php echo $value ? __('Change Image', 'nasa-core') : __('Upload Image', 'nasa-core'); ?>
-                        </button>
-                        
-                        <?php if ($value): ?>
-                            <button type="button" class="button nasa-remove-image-btn" data-target="<?php echo esc_attr($data_id); ?>">
-                                <?php echo __('Remove Image', 'nasa-core'); ?>
-                            </button>
-                        <?php endif; ?>
-                    </div>
-                    <?php
-                    break;
 
                 // Default: run an action.
                 default:
-                    
+                    do_action('nasa_widget_field_' . $setting['type'], $key, $value, $setting, $instance);
                     break;
             }
         }
