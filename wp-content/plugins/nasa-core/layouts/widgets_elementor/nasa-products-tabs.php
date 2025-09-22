@@ -214,4 +214,45 @@ foreach ($tabs_heading as $k => $heading) :
         if (!empty($inactive_image[$k])) :
             $inactive_img_src = wp_get_attachment_image_src($inactive_image[$k], 'thumbnail');
             if ($inactive_img_src) :
-                echo '<img src="' . esc_url($inactive_img_src[0]) . '" class="nasa-tab-inactive-image' . ($st
+                echo '<img src="' . esc_url($inactive_img_src[0]) . '" class="nasa-tab-inactive-image' . ($stt == 1 ? '' : ' active') . '" alt="' . esc_attr($heading) . '" style="max-width: 40px; height: auto;" />';
+            endif;
+        endif;
+        
+        echo '</span>';
+    endif;
+    
+    echo empty($before_title[$k]) ? '' : '<span class="ns-before_title">' . $before_title[$k] . '</span>';
+    echo $heading;
+    echo empty($after_title[$k]) ? '' : '<span class="ns-after_title">' . $after_title[$k] . '</span>';
+    
+    echo '</a>';
+    
+    echo '</li>';
+
+    $stt++;
+endforeach;
+
+echo '</ul>';
+echo '</div>';
+
+echo '<div class="nasa-panels">';
+
+/**
+ * Contents
+ */
+foreach ($tabs_content as $k => $content_args) :
+    $class = 'nasa-panel hidden-tag';
+    $class .= $tabs_content_first ? ' active first' : '';
+    $class .= ' nasa-section-' . $k;
+    
+    echo '<div class="' . esc_attr($class) . '">';
+    echo $tmpl && !$tabs_content_first ? '<template class="nasa-tmpl">' : '';
+    $_this->render_shortcode_text($content_args);
+    echo $tmpl && !$tabs_content_first ? '</template>' : '';
+    echo '</div>';
+    
+    $tabs_content_first = false;
+endforeach;
+
+echo '</div>';
+echo '</div>';
