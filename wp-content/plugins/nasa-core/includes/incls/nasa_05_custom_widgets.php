@@ -68,7 +68,11 @@ if (NASA_ELEMENTOR_ACTIVE) {
         wp_enqueue_style('nasa-elementor-style', NASA_CORE_PLUGIN_URL . 'admin/assets/nasa-core-elementor-style.css');
         
         wp_enqueue_script('jquery');
-        wp_enqueue_script('nasa-elementor-script', NASA_CORE_PLUGIN_URL . 'admin/assets/nasa-core-elementor-script.js');
+        
+        // Enqueue WordPress media library
+        wp_enqueue_media();
+        
+        wp_enqueue_script('nasa-elementor-script', NASA_CORE_PLUGIN_URL . 'admin/assets/nasa-core-elementor-script.js', array('jquery', 'media-upload', 'media-views'), '1.0', true);
         
         $nasa_core_js = 'var nasa_elementor_ajax="' . esc_url(admin_url('admin-ajax.php')) . '";';
         wp_add_inline_script('nasa-elementor-script', $nasa_core_js, 'before');
@@ -289,7 +293,11 @@ if (NASA_ELEMENTOR_ACTIVE) {
     add_action('admin_enqueue_scripts', 'nasa_admin_script_wgs');
     function nasa_admin_script_wgs() {
         wp_enqueue_style('nasa-elementor-style', NASA_CORE_PLUGIN_URL . 'admin/assets/nasa-core-elementor-style.css');
-        wp_enqueue_script('nasa-elementor-script', NASA_CORE_PLUGIN_URL . 'admin/assets/nasa-core-elementor-script.js');
+        
+        // Enqueue WordPress media library
+        wp_enqueue_media();
+        
+        wp_enqueue_script('nasa-elementor-script', NASA_CORE_PLUGIN_URL . 'admin/assets/nasa-core-elementor-script.js', array('jquery', 'media-upload', 'media-views'), '1.0', true);
 
         $nasa_core_js = 'var nasa_elementor_ajax="' . esc_url(admin_url('admin-ajax.php')) . '";';
         wp_add_inline_script('nasa-elementor-script', $nasa_core_js, 'before');

@@ -85,6 +85,83 @@ $('body').on('click', '.nasa_remove_img', function(event) {
 });
 
 /**
+ * NASA Image Upload for Products Tabs
+ */
+$('body').on('click', '.nasa-upload-image-btn', function(event) {
+    event.preventDefault();
+    
+    // Check if wp.media is available
+    if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+        console.error('WordPress media library is not available');
+        return;
+    }
+    
+    var _this = $(this);
+    var target_id = _this.attr('data-target');
+    var target_input = $('#' + target_id);
+    var target_preview = _this.siblings('.nasa-image-preview');
+    
+    // If the media frame already exists, reopen it.
+    if (file_frame[target_id]) {
+        file_frame[target_id].open();
+        return;
+    }
+    
+    // Create the media frame.
+    file_frame[target_id] = wp.media.frames.downloadable_file = wp.media({
+        title: 'Choose Image',
+        button: {
+            text: 'Use this image'
+        },
+        multiple: false
+    });
+
+    // When an image is selected, run a callback.
+    file_frame[target_id].on('select', function () {
+        var attachment = file_frame[target_id].state().get('selection').first().toJSON();
+        var attachment_thumbnail = attachment.sizes.thumbnail || attachment.sizes.full;
+        
+        // Update the hidden input with the attachment ID
+        target_input.val(attachment.id).trigger('change');
+        
+        // Update the preview image
+        target_preview.html('<img src="' + attachment_thumbnail.url + '" style="max-width: 100px; height: auto;" />');
+        
+        // Update button text and add remove button if not present
+        _this.text('Change Image');
+        if (!_this.siblings('.nasa-remove-image-btn').length) {
+            _this.after('<button type="button" class="button nasa-remove-image-btn" data-target="' + target_id + '">Remove Image</button>');
+        }
+    });
+
+    // Finally, open the modal.
+    file_frame[target_id].open();
+});
+
+/**
+ * NASA Remove Image for Products Tabs
+ */
+$('body').on('click', '.nasa-remove-image-btn', function(event) {
+    event.preventDefault();
+    
+    var _this = $(this);
+    var target_id = _this.attr('data-target');
+    var target_input = $('#' + target_id);
+    var target_preview = _this.siblings('.nasa-image-preview');
+    var upload_btn = _this.siblings('.nasa-upload-image-btn');
+    
+    // Clear the input value
+    target_input.val('').trigger('change');
+    
+    // Clear the preview
+    target_preview.empty();
+    
+    // Update button text and remove this button
+    upload_btn.text('Upload Image');
+    _this.remove();
+});
+
+/**
  * Add Tab Item
  */
 $('body').on('click', '.nasa-add-item', function() {
