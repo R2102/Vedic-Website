@@ -228,8 +228,30 @@ jQuery(document).ready(function ($) {
                     currentTab = $(_root).find('.' + _index);
                 }
 
+                // Handle tab image switching
+                $(_ul).find('li .nasa-tab-image-wrap').each(function() {
+                    var $imageWrap = $(this);
+                    var $activeImage = $imageWrap.find('.nasa-tab-active-image');
+                    var $inactiveImage = $imageWrap.find('.nasa-tab-inactive-image');
+                    
+                    // Show inactive image, hide active image for all tabs
+                    $activeImage.hide();
+                    $inactiveImage.show();
+                });
+
                 $(_ul).find('li').removeClass('active');
                 $(_this).parent().addClass('active');
+
+                // Show active image for the clicked tab
+                var $clickedImageWrap = $(_this).find('.nasa-tab-image-wrap');
+                if ($clickedImageWrap.length) {
+                    var $clickedActiveImage = $clickedImageWrap.find('.nasa-tab-active-image');
+                    var $clickedInactiveImage = $clickedImageWrap.find('.nasa-tab-inactive-image');
+                    
+                    $clickedInactiveImage.hide();
+                    $clickedActiveImage.show();
+                }
+
                 $(_panels).find('> .nasa-panel').removeClass('active');
 
                 if ($(currentTab).length) {
